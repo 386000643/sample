@@ -27,6 +27,18 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /*
+    *Eloquent 模型默认提供了多个事件，我们可以通过其提供的事件来监听到模型的创建，更新，删除，保存等操作。
+    *creating 用于监听模型被创建之前的事件
+    *生成的用户激活令牌需要在用户模型创建之前生成
+    */
+    public static function boot(){
+        parent::boot();
+        static::creating(function($user){
+            $user->activation_token=str_random(30);
+        });
+    }
+
 
     /**
     *生成用户头像
